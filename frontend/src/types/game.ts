@@ -4,7 +4,7 @@ export interface Position {
 }
 
 export interface LeaderboardEntry {
-  id?: number;
+  id?: string;
   userName: string;
   score: number;
   difficulty: Difficulty;
