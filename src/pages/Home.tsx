@@ -180,7 +180,7 @@ export default function Home() {
                     }
                     className="w-full rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600 active:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
-                    Show Leaderboar d & Settings
+                    Show Leaderboard & Settings
                   </button>
                 </div>
               </div>
