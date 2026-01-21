@@ -1,15 +1,15 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
-import GameControls from './GameControls';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import GameControls from "./GameControls";
 
-describe('GameControls', () => {
+describe("GameControls", () => {
   const mockProps = {
     onReset: vi.fn(),
     onTogglePause: vi.fn(),
   };
 
-  it('should display correct button labels based on game state', () => {
+  it("should display correct button labels based on game state", () => {
     const { rerender } = render(
       <GameControls
         {...mockProps}
@@ -19,7 +19,7 @@ describe('GameControls', () => {
         gamePaused={false}
       />,
     );
-    expect(screen.getByText('Start')).toBeInTheDocument();
+    expect(screen.getByText("Start")).toBeInTheDocument();
 
     rerender(
       <GameControls
@@ -30,7 +30,7 @@ describe('GameControls', () => {
         gamePaused={false}
       />,
     );
-    expect(screen.getByText('Pause')).toBeInTheDocument();
+    expect(screen.getByText("Pause")).toBeInTheDocument();
 
     rerender(
       <GameControls
@@ -41,10 +41,10 @@ describe('GameControls', () => {
         gamePaused={true}
       />,
     );
-    expect(screen.getByText('Resume')).toBeInTheDocument();
+    expect(screen.getByText("Resume")).toBeInTheDocument();
   });
 
-  it('should call handlers when buttons are clicked', async () => {
+  it("should call handlers when buttons are clicked", async () => {
     const user = userEvent.setup();
     render(
       <GameControls
@@ -56,14 +56,14 @@ describe('GameControls', () => {
       />,
     );
 
-    await user.click(screen.getByText('Restart'));
+    await user.click(screen.getByText("Restart"));
     expect(mockProps.onReset).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByText('Start'));
+    await user.click(screen.getByText("Start"));
     expect(mockProps.onTogglePause).toHaveBeenCalledTimes(1);
   });
 
-  it('should disable pause button when game is over or won', () => {
+  it("should disable pause button when game is over or won", () => {
     const { rerender } = render(
       <GameControls
         {...mockProps}
@@ -73,7 +73,7 @@ describe('GameControls', () => {
         gamePaused={false}
       />,
     );
-    expect(screen.getByText('Pause')).toBeDisabled();
+    expect(screen.getByText("Pause")).toBeDisabled();
 
     rerender(
       <GameControls
@@ -84,6 +84,6 @@ describe('GameControls', () => {
         gamePaused={false}
       />,
     );
-    expect(screen.getByText('Pause')).toBeDisabled();
+    expect(screen.getByText("Pause")).toBeDisabled();
   });
 });

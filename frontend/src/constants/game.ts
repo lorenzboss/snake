@@ -1,4 +1,4 @@
-import type { Difficulty, Position } from '../types/game';
+import type { Difficulty, Position } from "../types/game";
 
 export const DIFFICULTY_CONFIGS: Record<
   Difficulty,

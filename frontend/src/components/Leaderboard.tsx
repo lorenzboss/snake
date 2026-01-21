@@ -1,6 +1,6 @@
-import type { Difficulty, LeaderboardEntry } from '../types/game';
+import type { Difficulty, LeaderboardEntry } from "../types/game";
 
-const MEDALS = ['🥇', '🥈', '🥉'] as const;
+const MEDALS = ["🥇", "🥈", "🥉"] as const;
 
 interface LeaderboardProps {
   difficulty: Difficulty;
@@ -15,9 +15,9 @@ export default function Leaderboard({
 }: LeaderboardProps) {
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleDateString('de-CH', {
-      day: '2-digit',
-      month: '2-digit',
+    return date.toLocaleDateString("de-CH", {
+      day: "2-digit",
+      month: "2-digit",
     });
   };
 
@@ -58,7 +58,7 @@ export default function Leaderboard({
       <div className="space-y-2">
         <div
           className="grid gap-2 border-b border-gray-200 pb-2 dark:border-gray-700"
-          style={{ gridTemplateColumns: '2rem 1fr 3rem 3rem' }}
+          style={{ gridTemplateColumns: "2rem 1fr 3rem 3rem" }}
         >
           <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">
             Rank
@@ -91,13 +91,13 @@ export default function Leaderboard({
                 <div key={`${entry.userName}-${entry.timestamp}`}>
                   <div
                     className="grid gap-2 rounded py-1 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    style={{ gridTemplateColumns: '2rem 1fr 3rem 3rem' }}
+                    style={{ gridTemplateColumns: "2rem 1fr 3rem 3rem" }}
                   >
                     <div
                       className={`flex items-center justify-center font-semibold ${
                         index < 3
-                          ? 'text-gray-700 dark:text-gray-300'
-                          : 'text-gray-600 dark:text-gray-400'
+                          ? "text-gray-700 dark:text-gray-300"
+                          : "text-gray-600 dark:text-gray-400"
                       }`}
                     >
                       {index < 3 ? MEDALS[index] : actualRank}

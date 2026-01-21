@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import type { GameState } from '../types/game';
+import { useEffect, useRef } from "react";
+import type { GameState } from "../types/game";
 
 interface RenderOptions {
   isDarkMode: boolean;
@@ -26,17 +26,17 @@ export const useGameRenderer = (
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const colors = {
-      snake: '#10b981',
-      snakeHead: '#6ee7b7',
-      fruit: options.isDarkMode ? '#f87171' : '#ef4444',
-      goldenFruit: '#fcd34d',
-      goldenBorder: options.isDarkMode ? '#f97316' : '#f59e0b',
-      bg: options.isDarkMode ? '#1a1f26' : '#f3f4f6',
-      grid: options.isDarkMode ? '#374151' : '#d1d5db',
+      snake: "#10b981",
+      snakeHead: "#6ee7b7",
+      fruit: options.isDarkMode ? "#f87171" : "#ef4444",
+      goldenFruit: "#fcd34d",
+      goldenBorder: options.isDarkMode ? "#f97316" : "#f59e0b",
+      bg: options.isDarkMode ? "#1a1f26" : "#f3f4f6",
+      grid: options.isDarkMode ? "#374151" : "#d1d5db",
     };
 
     let frameId: number;

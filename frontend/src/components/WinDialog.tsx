@@ -16,16 +16,16 @@ export default function WinDialog({
   onPlayAgain,
 }: WinDialogProps) {
   const getMessage = () => {
-    if (won) return 'Congratulations!';
-    if (isNewHighscore) return 'New Highscore!';
-    return 'Game Over!';
+    if (won) return "Congratulations!";
+    if (isNewHighscore) return "New Highscore!";
+    return "Game Over!";
   };
 
   const getSubtext = () => {
-    if (won) return 'You won the game!';
-    if (isNewHighscore) return 'You beat your personal best!';
-    if (scoreTooLow) return 'Score too low to save (minimum: 3 points)';
-    return 'Better luck next time!';
+    if (won) return "You won the game!";
+    if (isNewHighscore) return "You beat your personal best!";
+    if (scoreTooLow) return "Score too low to save (minimum: 3 points)";
+    return "Better luck next time!";
   };
 
   return (
@@ -35,8 +35,8 @@ export default function WinDialog({
         <h2
           className={`mb-2 text-3xl font-bold ${
             isNewHighscore && !won
-              ? 'text-amber-500 dark:text-amber-400'
-              : 'text-gray-900 dark:text-white'
+              ? "text-amber-500 dark:text-amber-400"
+              : "text-gray-900 dark:text-white"
           }`}
         >
           {getMessage()}

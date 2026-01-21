@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 interface PlayerNameDialogProps {
   onSaveName: (name: string) => void;
@@ -7,8 +7,8 @@ interface PlayerNameDialogProps {
 export default function PlayerNameDialog({
   onSaveName,
 }: PlayerNameDialogProps) {
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
 
   const validateName = (value: string): boolean => {
     // Only allow letters, numbers, hyphens, and underscores
@@ -20,17 +20,17 @@ export default function PlayerNameDialog({
     const value = e.target.value;
     setName(value);
 
-    if (value === '') {
-      setError('');
+    if (value === "") {
+      setError("");
       return;
     }
 
     if (!validateName(value)) {
       setError(
-        'Only letters, numbers, hyphens (-), and underscores (_) allowed',
+        "Only letters, numbers, hyphens (-), and underscores (_) allowed",
       );
     } else {
-      setError('');
+      setError("");
     }
   };
 
@@ -57,13 +57,13 @@ export default function PlayerNameDialog({
             type="text"
             value={name}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+            onKeyDown={(e) => e.key === "Enter" && handleSave()}
             placeholder="Your name"
             maxLength={20}
             className={`w-full rounded-lg border px-4 py-3 text-gray-900 focus:ring-2 focus:outline-none dark:bg-[#0C1116] dark:text-white ${
               error
-                ? 'border-red-500 focus:border-red-500 focus:ring-red-500 dark:border-red-500'
-                : 'border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 dark:border-gray-600 dark:focus:border-emerald-400 dark:focus:ring-emerald-400'
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500 dark:border-red-500"
+                : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 dark:border-gray-600 dark:focus:border-emerald-400 dark:focus:ring-emerald-400"
             }`}
             autoFocus
           />

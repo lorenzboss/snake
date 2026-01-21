@@ -1,10 +1,10 @@
-import { useRef } from 'react';
-import { useDarkMode } from '../hooks/useDarkMode';
-import { useGameRenderer } from '../hooks/useGameRenderer';
-import { useScoreAnimation } from '../hooks/useScoreAnimation';
-import type { GameState } from '../types/game';
-import GameControls from './GameControls';
-import GameStatus from './GameStatus';
+import { useRef } from "react";
+import { useDarkMode } from "../hooks/useDarkMode";
+import { useGameRenderer } from "../hooks/useGameRenderer";
+import { useScoreAnimation } from "../hooks/useScoreAnimation";
+import type { GameState } from "../types/game";
+import GameControls from "./GameControls";
+import GameStatus from "./GameStatus";
 
 interface GameBoardProps {
   gameState: GameState;
@@ -37,8 +37,8 @@ export default function GameBoard({
           <p
             className={`text-3xl font-bold transition-all duration-500 ${
               isGolden
-                ? 'scale-105 text-amber-400'
-                : 'scale-100 text-emerald-500'
+                ? "scale-105 text-amber-400"
+                : "scale-100 text-emerald-500"
             }`}
           >
             Score: {gameState.score}

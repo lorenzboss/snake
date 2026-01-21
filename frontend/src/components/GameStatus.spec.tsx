@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import GameStatus from './GameStatus';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import GameStatus from "./GameStatus";
 
-describe('GameStatus', () => {
+describe("GameStatus", () => {
   it('should show "Press Space" message when game not started', () => {
     render(
       <GameStatus
@@ -14,7 +14,7 @@ describe('GameStatus', () => {
     );
 
     expect(
-      screen.getByText('Press Space or Start to begin'),
+      screen.getByText("Press Space or Start to begin"),
     ).toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe('GameStatus', () => {
       />,
     );
 
-    expect(screen.getByText('Game Over!')).toBeInTheDocument();
+    expect(screen.getByText("Game Over!")).toBeInTheDocument();
   });
 
   it('should show "Paused" message when game is paused', () => {
@@ -41,10 +41,10 @@ describe('GameStatus', () => {
       />,
     );
 
-    expect(screen.getByText('Paused')).toBeInTheDocument();
+    expect(screen.getByText("Paused")).toBeInTheDocument();
   });
 
-  it('should not show paused message when game is won', () => {
+  it("should not show paused message when game is won", () => {
     render(
       <GameStatus
         gameStarted={true}
@@ -54,10 +54,10 @@ describe('GameStatus', () => {
       />,
     );
 
-    expect(screen.queryByText('Paused')).not.toBeInTheDocument();
+    expect(screen.queryByText("Paused")).not.toBeInTheDocument();
   });
 
-  it('should return null when game is running', () => {
+  it("should return null when game is running", () => {
     const { container } = render(
       <GameStatus
         gameStarted={true}
@@ -70,7 +70,7 @@ describe('GameStatus', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('should prioritize game over message over paused', () => {
+  it("should prioritize game over message over paused", () => {
     render(
       <GameStatus
         gameStarted={true}
@@ -80,7 +80,7 @@ describe('GameStatus', () => {
       />,
     );
 
-    expect(screen.getByText('Game Over!')).toBeInTheDocument();
-    expect(screen.queryByText('Paused')).not.toBeInTheDocument();
+    expect(screen.getByText("Game Over!")).toBeInTheDocument();
+    expect(screen.queryByText("Paused")).not.toBeInTheDocument();
   });
 });

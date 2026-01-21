@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import DifficultySwitcher from '../components/DifficultySwitcher';
-import Footer from '../components/Footer';
-import GameBoard from '../components/GameBoard';
-import Leaderboard from '../components/Leaderboard';
-import PlayerNameDialog from '../components/PlayerNameDialog';
-import WinDialog from '../components/WinDialog';
-import { useSnakeGame } from '../hooks/useSnakeGame';
+import { useEffect, useRef, useState } from "react";
+import DifficultySwitcher from "../components/DifficultySwitcher";
+import Footer from "../components/Footer";
+import GameBoard from "../components/GameBoard";
+import Leaderboard from "../components/Leaderboard";
+import PlayerNameDialog from "../components/PlayerNameDialog";
+import WinDialog from "../components/WinDialog";
+import { useSnakeGame } from "../hooks/useSnakeGame";
 
 export default function Home() {
   const {
@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     // Check if player name exists in localStorage
-    const savedName = localStorage.getItem('snake-game-player-name');
+    const savedName = localStorage.getItem("snake-game-player-name");
     if (savedName) {
       setPlayerName(savedName);
     } else {
@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   const handleSaveName = (name: string) => {
-    localStorage.setItem('snake-game-player-name', name);
+    localStorage.setItem("snake-game-player-name", name);
     setPlayerName(name);
     setShowNameDialog(false);
   };
@@ -98,7 +98,7 @@ export default function Home() {
           scoreSaveInProgressRef.current = false;
         })
         .catch((error) => {
-          console.error('[HOME] Error saving score:', error);
+          console.error("[HOME] Error saving score:", error);
           setScoreSaved(true); // Still show dialog even if save failed
           scoreSaveInProgressRef.current = false;
         });

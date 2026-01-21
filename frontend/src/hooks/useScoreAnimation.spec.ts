@@ -1,15 +1,15 @@
-import { act, renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { useScoreAnimation } from './useScoreAnimation';
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { useScoreAnimation } from "./useScoreAnimation";
 
-describe('useScoreAnimation', () => {
-  it('should initialize with isGolden as false', () => {
+describe("useScoreAnimation", () => {
+  it("should initialize with isGolden as false", () => {
     const { result } = renderHook(() => useScoreAnimation(0));
 
     expect(result.current.isGolden).toBe(false);
   });
 
-  it('should set isGolden to true when score increases by 5', async () => {
+  it("should set isGolden to true when score increases by 5", async () => {
     const { result, rerender } = renderHook(
       ({ score }) => useScoreAnimation(score),
       { initialProps: { score: 0 } },
@@ -22,7 +22,7 @@ describe('useScoreAnimation', () => {
     expect(result.current.isGolden).toBe(true);
   });
 
-  it('should reset isGolden to false after 800ms', async () => {
+  it("should reset isGolden to false after 800ms", async () => {
     vi.useFakeTimers();
 
     const { result, rerender } = renderHook(
@@ -42,7 +42,7 @@ describe('useScoreAnimation', () => {
     vi.useRealTimers();
   });
 
-  it('should not trigger animation for score increase of 1', () => {
+  it("should not trigger animation for score increase of 1", () => {
     const { result, rerender } = renderHook(
       ({ score }) => useScoreAnimation(score),
       { initialProps: { score: 0 } },
@@ -53,7 +53,7 @@ describe('useScoreAnimation', () => {
     expect(result.current.isGolden).toBe(false);
   });
 
-  it('should not trigger animation when score does not change', () => {
+  it("should not trigger animation when score does not change", () => {
     const { result, rerender } = renderHook(
       ({ score }) => useScoreAnimation(score),
       { initialProps: { score: 10 } },
@@ -64,7 +64,7 @@ describe('useScoreAnimation', () => {
     expect(result.current.isGolden).toBe(false);
   });
 
-  it('should handle multiple golden fruit animations', async () => {
+  it("should handle multiple golden fruit animations", async () => {
     vi.useFakeTimers();
 
     const { result, rerender } = renderHook(

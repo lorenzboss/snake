@@ -27,4 +27,4 @@ export interface GameState {
   speed: number;
 }
 
-export type Difficulty = 'easy' | 'medium' | 'hard';
+export type Difficulty = "easy" | "medium" | "hard";

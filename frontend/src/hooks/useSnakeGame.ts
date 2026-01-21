@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { KEY_TO_DIRECTION } from '../constants/game';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { KEY_TO_DIRECTION } from "../constants/game";
 import type {
   Difficulty,
   GameState,
   LeaderboardEntry,
   Position,
-} from '../types/game';
+} from "../types/game";
 import {
   generateNewFruit,
   getInitialGameState,
   isOppositeDirection,
   isPositionEqual,
-} from '../utils/gameLogic';
-import { addOrUpdateScore, loadLeaderboard } from '../utils/leaderboard';
+} from "../utils/gameLogic";
+import { addOrUpdateScore, loadLeaderboard } from "../utils/leaderboard";
 
 export const useSnakeGame = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
-    getInitialGameState('medium'),
+    getInitialGameState("medium"),
   );
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
@@ -41,7 +41,7 @@ export const useSnakeGame = () => {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     // Ignore keyboard input if user is typing in an input field
     const target = e.target as HTMLElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
       return;
     }
 
@@ -49,7 +49,7 @@ export const useSnakeGame = () => {
       e.preventDefault();
     }
 
-    if (e.code === 'Space') {
+    if (e.code === "Space") {
       e.preventDefault();
       setGameState((prevState) => {
         if (prevState.gameOver || prevState.gameWon) {
@@ -84,8 +84,8 @@ export const useSnakeGame = () => {
 
   // Game loop
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   useEffect(() => {

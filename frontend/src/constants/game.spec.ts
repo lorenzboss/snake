@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { DIFFICULTY_CONFIGS, DIRECTIONS, KEY_TO_DIRECTION } from './game';
+import { describe, expect, it } from "vitest";
+import { DIFFICULTY_CONFIGS, DIRECTIONS, KEY_TO_DIRECTION } from "./game";
 
-describe('game constants', () => {
-  describe('DIFFICULTY_CONFIGS', () => {
-    it('should have correct configurations', () => {
+describe("game constants", () => {
+  describe("DIFFICULTY_CONFIGS", () => {
+    it("should have correct configurations", () => {
       expect(DIFFICULTY_CONFIGS.easy).toEqual({
         boardSize: 10,
         cellSize: 30,
@@ -21,7 +21,7 @@ describe('game constants', () => {
       });
     });
 
-    it('should scale difficulty correctly', () => {
+    it("should scale difficulty correctly", () => {
       expect(DIFFICULTY_CONFIGS.easy.boardSize).toBeLessThan(
         DIFFICULTY_CONFIGS.medium.boardSize,
       );
@@ -34,8 +34,8 @@ describe('game constants', () => {
     });
   });
 
-  describe('DIRECTIONS', () => {
-    it('should have all four directions', () => {
+  describe("DIRECTIONS", () => {
+    it("should have all four directions", () => {
       expect(DIRECTIONS.UP).toEqual({ x: 0, y: -1 });
       expect(DIRECTIONS.DOWN).toEqual({ x: 0, y: 1 });
       expect(DIRECTIONS.LEFT).toEqual({ x: -1, y: 0 });
@@ -43,15 +43,15 @@ describe('game constants', () => {
     });
   });
 
-  describe('KEY_TO_DIRECTION', () => {
-    it('should map arrow keys', () => {
+  describe("KEY_TO_DIRECTION", () => {
+    it("should map arrow keys", () => {
       expect(KEY_TO_DIRECTION.ArrowUp).toEqual(DIRECTIONS.UP);
       expect(KEY_TO_DIRECTION.ArrowDown).toEqual(DIRECTIONS.DOWN);
       expect(KEY_TO_DIRECTION.ArrowLeft).toEqual(DIRECTIONS.LEFT);
       expect(KEY_TO_DIRECTION.ArrowRight).toEqual(DIRECTIONS.RIGHT);
     });
 
-    it('should map WASD keys', () => {
+    it("should map WASD keys", () => {
       expect(KEY_TO_DIRECTION.w).toEqual(DIRECTIONS.UP);
       expect(KEY_TO_DIRECTION.W).toEqual(DIRECTIONS.UP);
       expect(KEY_TO_DIRECTION.a).toEqual(DIRECTIONS.LEFT);

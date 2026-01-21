@@ -1,6 +1,6 @@
-import type { Difficulty } from '../types/game';
+import type { Difficulty } from "../types/game";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 export interface LeaderboardApiEntry {
   id?: number;
@@ -14,7 +14,7 @@ export interface LeaderboardApiEntry {
 export const leaderboardApi = {
   async getAll(): Promise<LeaderboardApiEntry[]> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard`);
-    if (!response.ok) throw new Error('Failed to fetch leaderboard');
+    if (!response.ok) throw new Error("Failed to fetch leaderboard");
     return response.json();
   },
 
@@ -22,49 +22,49 @@ export const leaderboardApi = {
     const response = await fetch(
       `${API_BASE_URL}/api/leaderboard/top10/${difficulty}`,
     );
-    if (!response.ok) throw new Error('Failed to fetch top 10');
+    if (!response.ok) throw new Error("Failed to fetch top 10");
     return response.json();
   },
 
   async getById(id: number): Promise<LeaderboardApiEntry> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch entry');
+    if (!response.ok) throw new Error("Failed to fetch entry");
     return response.json();
   },
 
   async create(
-    entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>,
+    entry: Omit<LeaderboardApiEntry, "id" | "createdAt" | "updatedAt">,
   ): Promise<LeaderboardApiEntry> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(entry),
     });
-    if (!response.ok) throw new Error('Failed to create entry');
+    if (!response.ok) throw new Error("Failed to create entry");
     return response.json();
   },
 
   async update(
     id: number,
-    entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>,
+    entry: Omit<LeaderboardApiEntry, "id" | "createdAt" | "updatedAt">,
   ): Promise<LeaderboardApiEntry> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(entry),
     });
-    if (!response.ok) throw new Error('Failed to update entry');
+    if (!response.ok) throw new Error("Failed to update entry");
     return response.json();
   },
 
   async delete(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Failed to delete entry');
+    if (!response.ok) throw new Error("Failed to delete entry");
   },
 };

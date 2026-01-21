@@ -1,5 +1,5 @@
-import type { Difficulty, LeaderboardEntry } from '../types/game';
-import { leaderboardApi, type LeaderboardApiEntry } from './api';
+import type { Difficulty, LeaderboardEntry } from "../types/game";
+import { leaderboardApi, type LeaderboardApiEntry } from "./api";
 
 // Convert API response to frontend format
 const apiToLocal = (apiEntry: LeaderboardApiEntry): LeaderboardEntry => ({
@@ -19,7 +19,7 @@ const localToApi = (
   name: string,
   score: number,
   difficulty: Difficulty,
-): Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'> => ({
+): Omit<LeaderboardApiEntry, "id" | "createdAt" | "updatedAt"> => ({
   userName: name,
   score,
   difficulty,
@@ -30,7 +30,7 @@ export const loadLeaderboard = async (): Promise<LeaderboardEntry[]> => {
     const apiEntries = await leaderboardApi.getAll();
     return apiEntries.map(apiToLocal);
   } catch (error) {
-    console.error('Failed to load leaderboard from backend:', error);
+    console.error("Failed to load leaderboard from backend:", error);
     return [];
   }
 };
@@ -103,7 +103,7 @@ export const addOrUpdateScore = async (
 
     return { entries, isNewHighscore, previousHighscore, scoreTooLow };
   } catch (error) {
-    console.error('Failed to add/update score:', error);
+    console.error("Failed to add/update score:", error);
     return {
       entries: [],
       isNewHighscore: false,

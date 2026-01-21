@@ -1,5 +1,5 @@
-import { DIFFICULTY_CONFIGS, DIRECTIONS } from '../constants/game';
-import type { Difficulty, GameState, Position } from '../types/game';
+import { DIFFICULTY_CONFIGS, DIRECTIONS } from "../constants/game";
+import type { Difficulty, GameState, Position } from "../types/game";
 
 export const generateRandomPosition = (
   boardSize: number,

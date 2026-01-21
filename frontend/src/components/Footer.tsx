@@ -1,8 +1,8 @@
 const CREDITS = [
-  { name: 'lorenzboss', url: 'https://github.com/lorenzboss' },
-  { name: 'leandroaebi', url: 'https://github.com/leandroaebi' },
-  { name: 'jokudev', url: 'https://github.com/jokudev' },
-  { name: 'simiAtschool', url: 'https://github.com/simiAtschool' },
+  { name: "lorenzboss", url: "https://github.com/lorenzboss" },
+  { name: "leandroaebi", url: "https://github.com/leandroaebi" },
+  { name: "jokudev", url: "https://github.com/jokudev" },
+  { name: "simiAtschool", url: "https://github.com/simiAtschool" },
 ];
 
 export default function Footer() {
