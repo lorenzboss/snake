@@ -15,9 +15,12 @@ export default function Home() {
     resetGame,
     togglePause,
     saveScore,
+    changeDirection,
   } = useSnakeGame();
   const [showNameDialog, setShowNameDialog] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
+  const [showMobileLeaderboard, setShowMobileLeaderboard] = useState(false);
+  const [isLeaderboardAnimating, setIsLeaderboardAnimating] = useState(false);
   const [isNewHighscore, setIsNewHighscore] = useState(false);
   const [previousHighscore, setPreviousHighscore] = useState<number | null>(
     null,
@@ -29,6 +32,20 @@ export default function Home() {
     gameWon: false,
   });
   const scoreSaveInProgressRef = useRef(false);
+
+  // Handle leaderboard animation
+  useEffect(() => {
+    if (showMobileLeaderboard) {
+      setIsLeaderboardAnimating(true);
+    }
+  }, [showMobileLeaderboard]);
+
+  const handleCloseMobileLeaderboard = () => {
+    setIsLeaderboardAnimating(false);
+    setTimeout(() => {
+      setShowMobileLeaderboard(false);
+    }, 300);
+  };
 
   useEffect(() => {
     // Check if player name exists in localStorage
@@ -113,37 +130,119 @@ export default function Home() {
   ]);
 
   return (
-    <div className="page-container flex min-h-screen flex-col">
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="w-full max-w-6xl space-y-8 px-4">
-          <div className="flex gap-8">
-            <aside className="hidden w-80 lg:flex lg:flex-col lg:justify-center">
-              <div className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-lg dark:bg-[#1A1F26]">
-                <Leaderboard
-                  difficulty={gameState.difficulty}
-                  entries={leaderboard}
-                  currentPlayerName={playerName}
-                />
-                <DifficultySwitcher
-                  currentDifficulty={gameState.difficulty}
-                  onDifficultyChange={setDifficulty}
-                  disabled={gameState.gameStarted}
-                />
-              </div>
-            </aside>
+    <div
+      className="page-container fixed inset-0 flex flex-col"
+      style={{ height: "100dvh" }}
+    >
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex min-h-full flex-col items-center justify-start py-12 sm:py-4 md:py-6 lg:justify-center lg:py-0">
+          <div className="w-full max-w-6xl space-y-2 px-2 sm:space-y-4 sm:px-4 md:space-y-6 lg:space-y-8">
+            <div className="flex flex-col gap-8 lg:flex-row">
+              {/* Leaderboard and Difficulty (Desktop - Left Sidebar) */}
+              <aside className="hidden w-80 lg:flex lg:flex-col lg:justify-center">
+                <div className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-lg dark:bg-[#1A1F26]">
+                  <Leaderboard
+                    difficulty={gameState.difficulty}
+                    entries={leaderboard}
+                    currentPlayerName={playerName}
+                  />
+                  <DifficultySwitcher
+                    currentDifficulty={gameState.difficulty}
+                    onDifficultyChange={setDifficulty}
+                    disabled={gameState.gameStarted}
+                  />
+                </div>
+              </aside>
 
-            {/* Game Board (Center/Right) */}
-            <div className="flex-1 lg:max-w-2xl">
-              <GameBoard
-                gameState={gameState}
-                resetGame={resetGame}
-                togglePause={togglePause}
-              />
+              {/* Game Board (Center/Right) */}
+              <div className="flex-1 lg:max-w-2xl">
+                <GameBoard
+                  gameState={gameState}
+                  resetGame={resetGame}
+                  togglePause={togglePause}
+                  onDirectionChange={changeDirection}
+                />
+
+                {/* Mobile Leaderboard Toggle Button */}
+                <div className="mt-4 px-4 lg:hidden">
+                  <button
+                    onClick={() => {
+                      if (showMobileLeaderboard) {
+                        handleCloseMobileLeaderboard();
+                      } else {
+                        setShowMobileLeaderboard(true);
+                      }
+                    }}
+                    disabled={
+                      gameState.gameStarted &&
+                      !gameState.gameOver &&
+                      !gameState.gameWon
+                    }
+                    className="w-full rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600 active:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                  >
+                    Show Leaderboar d & Settings
+                  </button>
+                </div>
+              </div>
             </div>
+
+            {/* Leaderboard and Difficulty (Mobile - Collapsible) */}
+            {showMobileLeaderboard && (
+              <div
+                className={`fixed inset-0 z-40 flex items-end justify-center bg-black/40 transition-opacity duration-300 ease-in-out lg:hidden ${
+                  isLeaderboardAnimating ? "opacity-100" : "opacity-0"
+                }`}
+                onClick={handleCloseMobileLeaderboard}
+              >
+                <div
+                  className={`max-h-[80vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 ease-out dark:bg-[#1A1F26] ${
+                    isLeaderboardAnimating
+                      ? "translate-y-0"
+                      : "translate-y-full"
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-[#1A1F26]">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Settings & Leaderboard
+                    </h3>
+                    <button
+                      onClick={handleCloseMobileLeaderboard}
+                      className="text-3xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-4 p-4">
+                    <div className="rounded-lg bg-gray-50 p-3 dark:bg-[#0C1116]">
+                      <Leaderboard
+                        difficulty={gameState.difficulty}
+                        entries={leaderboard}
+                        currentPlayerName={playerName}
+                      />
+                    </div>
+                    <div className="rounded-lg bg-gray-50 p-3 dark:bg-[#0C1116]">
+                      <DifficultySwitcher
+                        currentDifficulty={gameState.difficulty}
+                        onDifficultyChange={setDifficulty}
+                        disabled={gameState.gameStarted}
+                      />
+                    </div>
+
+                    <div className="lg:hidden">
+                      <Footer />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <Footer />
+
+      <div className="hidden lg:block">
+        <Footer />
+      </div>
 
       {showNameDialog && <PlayerNameDialog onSaveName={handleSaveName} />}
 
@@ -155,6 +254,8 @@ export default function Home() {
           previousHighscore={previousHighscore}
           scoreTooLow={scoreTooLow}
           onPlayAgain={handlePlayAgain}
+          leaderboard={leaderboard}
+          difficulty={gameState.difficulty}
         />
       )}
     </div>

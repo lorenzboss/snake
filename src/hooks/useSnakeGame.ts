@@ -10,9 +10,11 @@ import {
 import { useLeaderboard } from "./useLeaderboard";
 
 export const useSnakeGame = () => {
-  const [gameState, setGameState] = useState<GameState>(() =>
-    getInitialGameState("medium"),
-  );
+  const [gameState, setGameState] = useState<GameState>(() => {
+    // Use 'easy' difficulty on mobile devices
+    const isMobile = window.innerWidth < 768;
+    return getInitialGameState(isMobile ? "easy" : "medium");
+  });
 
   // Use the reactive leaderboard hook - updates automatically!
   const { leaderboard, addOrUpdateScore: addOrUpdateScoreMutation } =
@@ -227,6 +229,21 @@ export const useSnakeGame = () => {
     [gameState.score, gameState.difficulty, addOrUpdateScoreMutation],
   );
 
+  const changeDirection = useCallback((newDirection: Position) => {
+    setGameState((prevState) => {
+      if (prevState.gameOver || prevState.gamePaused || !prevState.gameStarted)
+        return prevState;
+
+      // Use the last actual move direction instead of the current direction
+      // to prevent multiple direction changes between game loop ticks
+      if (isOppositeDirection(lastMoveDirectionRef.current, newDirection)) {
+        return prevState;
+      }
+
+      return { ...prevState, direction: newDirection };
+    });
+  }, []);
+
   return {
     gameState,
     leaderboard,
@@ -234,5 +251,6 @@ export const useSnakeGame = () => {
     togglePause,
     setDifficulty,
     saveScore,
+    changeDirection,
   };
 };

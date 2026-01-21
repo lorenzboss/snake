@@ -11,12 +11,14 @@ describe("WinDialog", () => {
     previousHighscore: null,
     scoreTooLow: false,
     onPlayAgain: vi.fn(),
+    leaderboard: [],
+    difficulty: "medium" as const,
   };
 
   it("should render game over message by default", () => {
     render(<WinDialog {...defaultProps} />);
 
-    expect(screen.getByText("Game Over!")).toBeInTheDocument();
+    expect(screen.getByText("Game Over")).toBeInTheDocument();
     expect(screen.getByText("Better luck next time!")).toBeInTheDocument();
     expect(screen.getByText("Final Score: 100")).toBeInTheDocument();
   });
@@ -24,14 +26,14 @@ describe("WinDialog", () => {
   it("should render congratulations message when won", () => {
     render(<WinDialog {...defaultProps} won={true} />);
 
-    expect(screen.getByText("Congratulations!")).toBeInTheDocument();
+    expect(screen.getByText("Congratulations")).toBeInTheDocument();
     expect(screen.getByText("You won the game!")).toBeInTheDocument();
   });
 
   it("should render new highscore message when achieved", () => {
     render(<WinDialog {...defaultProps} isNewHighscore={true} score={150} />);
 
-    expect(screen.getByText("New Highscore!")).toBeInTheDocument();
+    expect(screen.getByText("New Highscore")).toBeInTheDocument();
     expect(
       screen.getByText("You beat your personal best!"),
     ).toBeInTheDocument();
@@ -66,15 +68,15 @@ describe("WinDialog", () => {
   it("should prioritize won message over highscore message", () => {
     render(<WinDialog {...defaultProps} won={true} isNewHighscore={true} />);
 
-    expect(screen.getByText("Congratulations!")).toBeInTheDocument();
+    expect(screen.getByText("Congratulations")).toBeInTheDocument();
     expect(screen.getByText("You won the game!")).toBeInTheDocument();
   });
 
   it("should apply correct styling for new highscore", () => {
     render(<WinDialog {...defaultProps} isNewHighscore={true} />);
 
-    const heading = screen.getByText("New Highscore!");
-    expect(heading).toHaveClass("text-amber-500");
+    const heading = screen.getByText("New Highscore");
+    expect(heading).toHaveClass("text-yellow-500");
   });
 
   it("should not show previous highscore when null", () => {
