@@ -6,7 +6,7 @@ import Leaderboard from "./Leaderboard";
 describe("Leaderboard", () => {
   const mockEntries: LeaderboardEntry[] = [
     {
-      id: 1,
+      id: "1",
       userName: "Player1",
       score: 150,
       difficulty: "easy",
@@ -14,7 +14,7 @@ describe("Leaderboard", () => {
       timestamp: Date.now(),
     },
     {
-      id: 2,
+      id: "2",
       userName: "Player2",
       score: 100,
       difficulty: "easy",
@@ -22,7 +22,7 @@ describe("Leaderboard", () => {
       timestamp: Date.now(),
     },
     {
-      id: 3,
+      id: "3",
       userName: "Player3",
       score: 80,
       difficulty: "easy",
@@ -30,7 +30,7 @@ describe("Leaderboard", () => {
       timestamp: Date.now(),
     },
     {
-      id: 4,
+      id: "4",
       userName: "Player4",
       score: 200,
       difficulty: "medium",
@@ -102,7 +102,7 @@ describe("Leaderboard", () => {
     const manyEntries: LeaderboardEntry[] = Array.from(
       { length: 10 },
       (_, i) => ({
-        id: i + 1,
+        id: String(i + 1),
         userName: `Player${i + 1}`,
         score: 100 - i * 5,
         difficulty: "hard",
@@ -122,7 +122,7 @@ describe("Leaderboard", () => {
     const manyEntries: LeaderboardEntry[] = Array.from(
       { length: 10 },
       (_, i) => ({
-        id: i + 1,
+        id: String(i + 1),
         userName: `Player${i + 1}`,
         score: 100 - i * 5,
         difficulty: "medium",
@@ -147,7 +147,7 @@ describe("Leaderboard", () => {
     const timestamp = new Date("2024-01-15").getTime();
     const entriesWithDate: LeaderboardEntry[] = [
       {
-        id: 1,
+        id: "1",
         userName: "Player1",
         score: 100,
         difficulty: "easy",

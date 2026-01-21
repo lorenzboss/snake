@@ -1,6 +1,26 @@
 import { act, renderHook } from "@testing-library/react";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { createElement, type ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSnakeGame } from "./useSnakeGame";
+
+// Mock Convex API
+vi.mock("../../convex/_generated/api", () => ({
+  api: {
+    leaderboard: {
+      getAll: "leaderboard:getAll",
+      create: "leaderboard:create",
+      update: "leaderboard:update",
+    },
+  },
+}));
+
+// Create a mock Convex client
+const mockConvexClient = new ConvexReactClient("https://mock.convex.cloud");
+
+// Wrapper component with ConvexProvider
+const wrapper = ({ children }: { children: ReactNode }) =>
+  createElement(ConvexProvider, { client: mockConvexClient }, children);
 
 describe("useSnakeGame", () => {
   beforeEach(() => {
@@ -14,7 +34,7 @@ describe("useSnakeGame", () => {
 
   describe("initialization", () => {
     it("should initialize with default medium difficulty", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       expect(result.current.gameState.difficulty).toBe("medium");
       expect(result.current.gameState.boardSize).toBe(20);
@@ -27,7 +47,7 @@ describe("useSnakeGame", () => {
 
   describe("difficulty change", () => {
     it("should change difficulty when game not started", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.setDifficulty("hard");
@@ -38,7 +58,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should not change difficulty when game is started", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause(); // Start game
@@ -54,7 +74,7 @@ describe("useSnakeGame", () => {
 
   describe("game controls", () => {
     it("should start game when togglePause is called", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause();
@@ -65,7 +85,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should pause and unpause game", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       // Start game
       act(() => {
@@ -90,7 +110,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should reset game to initial state", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause(); // Start game
@@ -112,7 +132,7 @@ describe("useSnakeGame", () => {
 
   describe("keyboard controls", () => {
     it("should start game with Space key", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         const event = new KeyboardEvent("keydown", { code: "Space" });
@@ -124,7 +144,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should toggle pause with Space key", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       // Start game
       act(() => {
@@ -144,7 +164,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should reset game with Space when game is over", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       // Manually set game over
       act(() => {
@@ -176,7 +196,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should change direction with arrow keys", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause(); // Start game
@@ -194,7 +214,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should not allow opposite direction change", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause(); // Start game (snake moving RIGHT)
@@ -211,7 +231,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should support WASD keys", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause();
@@ -226,7 +246,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should not change direction when game is paused", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause(); // Start
@@ -244,7 +264,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should not change direction when game is over", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       // Simulate game over state by manually setting it
       act(() => {
@@ -258,7 +278,7 @@ describe("useSnakeGame", () => {
 
   describe("game loop logic", () => {
     it("should not run game loop when paused", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       act(() => {
         result.current.togglePause();
@@ -276,7 +296,7 @@ describe("useSnakeGame", () => {
     });
 
     it("should not run game loop when game not started", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       const headBefore = result.current.gameState.snake[0];
 
@@ -298,7 +318,7 @@ describe("useSnakeGame", () => {
     // - Win condition (score >= boardSize²)
 
     it("should have collision detection code paths defined", () => {
-      const { result } = renderHook(() => useSnakeGame());
+      const { result } = renderHook(() => useSnakeGame(), { wrapper });
 
       // The game loop contains:
       // Line 103: Self-collision check

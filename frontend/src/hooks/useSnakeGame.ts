@@ -1,39 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { KEY_TO_DIRECTION } from "../constants/game";
-import type {
-  Difficulty,
-  GameState,
-  LeaderboardEntry,
-  Position,
-} from "../types/game";
+import type { Difficulty, GameState, Position } from "../types/game";
 import {
   generateNewFruit,
   getInitialGameState,
   isOppositeDirection,
   isPositionEqual,
 } from "../utils/gameLogic";
-import { addOrUpdateScore, loadLeaderboard } from "../utils/leaderboard";
+import { useLeaderboard } from "./useLeaderboard";
 
 export const useSnakeGame = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
     getInitialGameState("medium"),
   );
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
-  // Load leaderboard on mount
-  useEffect(() => {
-    let isMounted = true;
-    loadLeaderboard()
-      .then((data) => {
-        if (isMounted) {
-          setLeaderboard(data);
-        }
-      })
-      .catch(console.error);
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  // Use the reactive leaderboard hook - updates automatically!
+  const { leaderboard, addOrUpdateScore: addOrUpdateScoreMutation } =
+    useLeaderboard();
 
   const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastMoveDirectionRef = useRef<Position>(gameState.direction);
@@ -232,17 +215,16 @@ export const useSnakeGame = () => {
       previousHighscore: number | null;
       scoreTooLow: boolean;
     }> => {
-      const { entries, isNewHighscore, previousHighscore, scoreTooLow } =
-        await addOrUpdateScore(
+      const { isNewHighscore, previousHighscore, scoreTooLow } =
+        await addOrUpdateScoreMutation(
           name,
           gameState.score,
           gameState.difficulty,
-          leaderboard, // Pass current leaderboard to avoid extra API call
         );
-      setLeaderboard(entries);
+      // No need to update leaderboard manually - it updates automatically!
       return { isNewHighscore, previousHighscore, scoreTooLow };
     },
-    [gameState.score, gameState.difficulty, leaderboard],
+    [gameState.score, gameState.difficulty, addOrUpdateScoreMutation],
   );
 
   return {

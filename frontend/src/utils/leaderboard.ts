@@ -1,9 +1,4 @@
-import { ConvexReactClient } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import type { Difficulty, LeaderboardEntry } from "../types/game";
-
-// Initialize Convex client
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 interface ConvexLeaderboardEntry {
   id: string;
@@ -25,25 +20,33 @@ const convexToLocal = (
   id: convexEntry.id,
 });
 
-export const loadLeaderboard = async (): Promise<LeaderboardEntry[]> => {
-  try {
-    const entries = await convex.query(api.leaderboard.getAll);
-    return entries.map(convexToLocal);
-  } catch (error) {
-    console.error("Failed to load leaderboard from Convex:", error);
-    return [];
-  }
+// Helper to convert Convex entries - used by hooks
+export const convertLeaderboardEntries = (
+  entries: ConvexLeaderboardEntry[] | undefined,
+): LeaderboardEntry[] => {
+  if (!entries) return [];
+  return entries.map(convexToLocal);
 };
 
 const MIN_SCORE_FOR_LEADERBOARD = 3;
 
-export const addOrUpdateScore = async (
+// Helper function to process score addition/update
+// This is called from the hook with the mutation function and current data
+export const processScoreUpdate = async (
   name: string,
   score: number,
   difficulty: Difficulty,
-  currentLeaderboard?: LeaderboardEntry[],
+  findByUserAndDifficulty: (args: {
+    userName: string;
+    difficulty: string;
+  }) => Promise<ConvexLeaderboardEntry | null>,
+  createMutation: (args: {
+    userName: string;
+    score: number;
+    difficulty: string;
+  }) => Promise<any>,
+  updateMutation: (args: { id: any; score: number }) => Promise<any>,
 ): Promise<{
-  entries: LeaderboardEntry[];
   isNewHighscore: boolean;
   previousHighscore: number | null;
   scoreTooLow: boolean;
@@ -51,23 +54,18 @@ export const addOrUpdateScore = async (
   try {
     // Check if score meets minimum requirement
     if (score < MIN_SCORE_FOR_LEADERBOARD) {
-      const entries = await loadLeaderboard();
       return {
-        entries,
         isNewHighscore: false,
         previousHighscore: null,
         scoreTooLow: true,
       };
     }
 
-    // Find existing entry for this player and difficulty (case-insensitive)
-    const existingEntry = await convex.query(
-      api.leaderboard.findByUserAndDifficulty,
-      {
-        userName: name,
-        difficulty,
-      },
-    );
+    // Find existing entry for this player and difficulty
+    const existingEntry = await findByUserAndDifficulty({
+      userName: name,
+      difficulty,
+    });
 
     const previousHighscore = existingEntry?.score ?? null;
     let isNewHighscore = false;
@@ -75,16 +73,15 @@ export const addOrUpdateScore = async (
     if (existingEntry && existingEntry.id) {
       // Update only if new score is HIGHER
       if (score > existingEntry.score) {
-        await convex.mutation(api.leaderboard.update, {
+        await updateMutation({
           id: existingEntry.id as any,
           score,
         });
         isNewHighscore = true;
       }
-      // If score is same or lower, don't update
     } else {
       // Create new entry (first time playing this difficulty)
-      await convex.mutation(api.leaderboard.create, {
+      await createMutation({
         userName: name,
         score,
         difficulty,
@@ -92,17 +89,10 @@ export const addOrUpdateScore = async (
       isNewHighscore = true;
     }
 
-    // If we updated or created an entry, reload from Convex to get fresh data
-    // Otherwise, use the cached data we already have
-    const entries = isNewHighscore
-      ? await loadLeaderboard()
-      : currentLeaderboard || (await loadLeaderboard());
-
-    return { entries, isNewHighscore, previousHighscore, scoreTooLow: false };
+    return { isNewHighscore, previousHighscore, scoreTooLow: false };
   } catch (error) {
     console.error("Failed to add/update score:", error);
     return {
-      entries: [],
       isNewHighscore: false,
       previousHighscore: null,
       scoreTooLow: false,
