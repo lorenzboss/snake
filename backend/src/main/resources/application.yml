@@ -1,0 +1,64 @@
+quarkus:
+  application:
+    name: backend
+
+  # SQLite Datasource Configuration
+  datasource:
+    db-kind: sqlite
+    jdbc:
+      url: jdbc:sqlite:database.db
+
+  # Hibernate ORM Configuration
+  hibernate-orm:
+    schema-management:
+      strategy: none
+    dialect: org.hibernate.community.dialect.SQLiteDialect
+    log:
+      sql: true
+
+  # Flyway Configuration
+  flyway:
+    migrate-at-start: true
+    baseline-on-migrate: true
+    baseline-version: "0"
+
+  # HTTP Configuration
+  http:
+    port: 8080
+    cors:
+      enabled: true
+      origins: "*"
+      methods: "GET,POST,PUT,DELETE,OPTIONS"
+      headers: "*"
+    # Static resources configuration
+    static-resources:
+      index-page: index.html
+      include-hidden: false
+
+  # Logging Configuration
+  log:
+    console:
+      enabled: true
+      level: INFO
+    category:
+      "ch.bbzbl":
+        level: DEBUG
+
+# Development Profile
+# Demo data is automatically loaded by DemoDataService on startup
+"%dev":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:sqlite:database-dev.db
+
+# Production Profile
+"%prod":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:sqlite:database-prod.db
+    hibernate-orm:
+      schema-management:
+        strategy: none
+
